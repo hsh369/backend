@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if items %}
+    <img src="{{url}}" alt="logo" class="w-full  mx-auto">
+    <div class="shadow-lg bg-gray-800 rounded-lg m-4 p-4">
+      <div class="grid gap-4 grid-cols-2">
+      {% for item in items %}
+      <div class="shadow-md rounded-lg bg-white grid grid-rows-2 gap-1">
+        <div class="grid grid-cols-3">
+        <img src="{{item.image}}" alt="image" class="w-40 h-40 rounded-lg py-2 px-2">
+        <div class="px-4 py-2">
+          <h1 class="text-gray-800 font-bold text-2xl">Label: {{item[1]['label']}} - {{item[1]['translation']}}</h1>
+          <p class="text-gray-800 font-semibold text-sm"> Confidence: {{item[1]['confidence']}}</p>
+          <audio controls class="m-1">
+            <source src="{{item[1]['audio_resource_url']}}" type="audio/wav">
+          </audio>
+          <audio controls class="m-1">
+            <source src="{{item[1]['audio_resource_url2']}}" type="audio/wav">
+          </audio>
+          
+        </div>
+        </div>
+        <div class="grid grid-cols-3 h-10 gap-20 mx-auto">
+          <i class="fa-solid fa-heart fa-lg" style="color: #cc0f0f;"></i>
+          <i class="fa-regular fa-bookmark fa-lg" style="color: #288633;"></i>
+          <i class="fa-solid fa-share fa-lg"></i>
+        </div>
+      </div>
+      
+      
+      {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <p class="text-gray-800 font-semibold text-3xl py-4 mx-4 my-2">Natijalar topilmadi.</p>
+    {% endif %}
+
+{% endblock %}
