@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from img_upload import imagekit 
 import imgprocessing
-
+from img_draw import draw_borders_on_image
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/media", StaticFiles(directory="media"), name="media")
@@ -49,12 +49,17 @@ def index(request: Request):
 
 @app.get("/items", response_class=HTMLResponse)
 def read_item(request: Request):
-    url = "https://media.designcafe.com/wp-content/uploads/2023/01/31151510/contemporary-interior-design-ideas-for-your-home.jpg"
+    url = "https://images.hindustantimes.com/img/2022/09/20/1600x900/office-g906b017c5_1920_1663669914946_1663669956567_1663669956567.jpg"
     obj_list = imgprocessing.get_objects_list(url)
     
     detailed_items = imgprocessing.get_object_details(obj_list)
-    for i in detailed_items:
-        item = detailed_items[i]
-        image_path = imgprocessing.crop_image(url,item)
-        item["image"] = image_path
-    return templates.TemplateResponse("results.html", {"request": request, "items": detailed_items.items(),"url":url})
+    # for i in detailed_items:
+    #     item = detailed_items[i]
+    #     image_path = imgprocessing.crop_image(url,item)
+    #     item["image"] = image_path
+    # summary = imgprocessing.summurize(str(detailed_items))
+    borders_list = []
+    for item in list(detailed_items.values()):
+        borders_list.append((item['x_min'],item['x_max'],item['y_min'],item['y_max']))
+    img_url = draw_borders_on_image(url, borders_list)
+    return templates.TemplateResponse("results.html", {"request": request, "items": detailed_items.items(),"url":url, "img_url":img_url})

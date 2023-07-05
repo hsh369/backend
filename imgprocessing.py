@@ -3,6 +3,7 @@ import requests
 import urllib.request
 from PIL import Image
 from keys import API_KEY
+from keys import SYNONYM_KEY
 
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 OD_URL ="https://api.edenai.run/v2/image/object_detection"
@@ -60,3 +61,18 @@ def crop_image(url,item):
     cropped_image.save(img_path)
     return img_path
 
+
+# def summurize(text):
+#     url ="https://api.edenai.run/v2/text/summarize"
+#     payload={"providers": "openai", "language": "en", "text": text}
+#     response = requests.post(url, json=payload, headers=HEADERS)
+#     result = json.loads(response.text)['openai']['result']
+#     payload1={"providers": "google", "language": "en-US", "option":"MALE", "text": result}
+#     response1 = requests.post(T2S_URL, json=payload1, headers=HEADERS)
+#     result1 = json.loads(response1.text)
+#     return result1['google']['audio_resource_url']
+
+
+def get_synonyms_and_antonyms(word):
+    url = "https://api.api-ninjas.com/v1/thesaurus?word="
+    response = requests.get(url+word, headers={"X-Api-Key": SYNONYM_KEY})
